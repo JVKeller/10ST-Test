@@ -23,8 +23,8 @@ return
                 let $firstname := $record/PersonalData/PersonName/GivenName
                 let $lastname := $record/PersonalData/PersonName/FamilyName
                 let $fullname := string-join(($lastname, $firstname), ", ")
-				let $filelist := $record/Documents/Document/Filename
-				let $doclist := $record/Documents/Document/FileId
+				let $doclist := $record/Documents/Document/Filename/string()
+				let $docid := $record/Documents/Document/FileId/string()
                 order by $lastname/FamilyName
                 return
                     <div id="output">
@@ -44,13 +44,17 @@ return
                                         		<tr>
                                         			<th colspan="2" style="width: 50%;"><div style="text-align: center;"> <strong>Driver Info</strong></div> </th>
                                         			<th style="width: 25.0000%;"> <strong>Associated Files</strong> </th>
-                                        			<th style="width: 25.0000%;"> <strong>File ID</strong> </th>
                                         		</tr>
                                         		<tr>
                                         			<th>Name:</th>
                                         			<th><strong> {$fullname} </strong></th>
-                                        			<th rowspan="8" style="vertical-align: top;"><a href="/files/#"> {$filelist}</a></th>
-                                        			<th rowspan="8" style="vertical-align: top;">{$doclist}</th>
+                                        			<th rowspan="8" style="vertical-align: top;">
+												    <ol>{
+												        for $item in $docid
+												        return
+												            <li><a href="files/{$item}">{$item} </a></li>
+											    	}</ol>
+													</th>
                                         		</tr>
                                         		<tr>
                                         			<td style="width: 25.0000%;">Driver / Record Number</td>
